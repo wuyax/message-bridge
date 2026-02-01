@@ -22,20 +22,23 @@ function send() {
       console.log(err)
     })
 }
-
-defineProps<{
-  msg: string
-}>()
 </script>
 
 <template>
   <div class="greetings">
+    <div class="title">Message Sender Test Page</div>
     <button class="send-btn" @click="send">Send</button>
     <hr class="divider" />
   </div>
 </template>
 
 <style scoped>
+.title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 20px;
+}
 .send-btn {
   cursor: pointer;
   padding: 5px 10px;

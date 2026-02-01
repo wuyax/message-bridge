@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import Sender from './components/Sender.vue'
 import MittDriver from './assets/message-bridge/drivers/MittDriver'
 import MessageBridge from './assets/message-bridge'
 import emitter from './assets/message-bridge/mitter'
@@ -35,7 +34,7 @@ function send(id: string) {
 <template>
   <header>
     <div class="wrapper">
-      <HelloWorld msg="Sended messages" />
+      <Sender />
     </div>
   </header>
 

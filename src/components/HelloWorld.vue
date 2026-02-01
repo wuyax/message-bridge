@@ -8,7 +8,13 @@ const bridge = new MessageBridge(driver)
 
 function send() {
   bridge
-    .request({ type: 'anov.create', payload: { name: 'test' }, to: 'myBridgeId' })
+    .request({
+      type: 'anov.create',
+      payload: { name: 'test' },
+      to: 'myBridgeId',
+      retryCount: 3,
+      retryDelay: 1000,
+    })
     .then((res) => {
       console.log(res)
     })

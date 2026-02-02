@@ -284,7 +284,7 @@ onUnmounted(() => {
 
 .demo-iframe {
   width: 100%;
-  height: 200px;
+  height: 400px;
   border: none;
   background: white;
 }

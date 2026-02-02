@@ -1,94 +1,131 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import Sender from './components/Sender.vue'
-import PostMessageDemo from './components/PostMessageDemo.vue'
-import { MittDriver, emitter } from 'message-bridge'
-import MessageBridge from 'message-bridge'
-
-// MittDriver Example
-const driver = new MittDriver(emitter)
-const bridge = new MessageBridge(driver)
-
-bridge.onCommand((data) => {
-  console.log(data)
-  bridge.reply(data.id, { result: 'success' })
-})
-
-let messageId = ref<string[]>([])
-const driver2 = new MittDriver(emitter)
-const bridge2 = new MessageBridge(driver2, { instanceId: 'myBridgeId' })
-bridge2.onCommand((data) => {
-  console.log(data)
-  messageId.value.push(data.id)
-})
-
-function send(id: string) {
-  try {
-    bridge2.reply(id, { result: 'success' })
-    messageId.value = messageId.value.filter((item) => item !== id)
-  } catch (error) {
-    console.log(error)
-  }
-}
+import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div>
-    <div class="wrapper">
-      <Sender />
-    </div>
-  </div>
+  <div class="app-layout">
+    <header class="app-header">
+      <div class="header-content">
+        <div class="logo">
+          <h1>MessageBridge</h1>
+          <span class="subtitle">Examples</span>
+        </div>
+        <nav class="nav-menu">
+          <RouterLink to="/" class="nav-link" active-class="active"> MittDriver </RouterLink>
+          <RouterLink to="/postmessage" class="nav-link" active-class="active">
+            PostMessageDriver
+          </RouterLink>
+        </nav>
+      </div>
+    </header>
 
-  <main>
-    <!-- MittDriver Example -->
-    <section class="demo-section">
-      <h2>MittDriver Example (In-Process)</h2>
-      <p v-for="id in messageId" :key="id" class="message-item">
-        <span class="message-id">Message ID: {{ id }}</span>
-        <button class="reply-btn" @click="send(id)">Reply</button>
+    <main class="app-main">
+      <RouterView />
+    </main>
+
+    <footer class="app-footer">
+      <p>
+        Built with
+        <a href="https://github.com/code-yeongyu/message-bridge" target="_blank" rel="noopener">
+          MessageBridge
+        </a>
       </p>
-    </section>
-
-    <!-- PostMessageDriver Example -->
-    <section class="demo-section">
-      <h2>PostMessageDriver Example (Cross-Window)</h2>
-      <PostMessageDemo />
-    </section>
-  </main>
+    </footer>
+  </div>
 </template>
 
 <style scoped>
-.message-item {
-  margin-bottom: 10px;
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
-.message-id {
-  margin-right: 10px;
-  font-family: monospace;
+
+.app-header {
+  background: white;
+  border-bottom: 1px solid #e5e5e5;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
-.reply-btn {
-  margin-left: 10px;
-  cursor: pointer;
-  padding: 5px 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.reply-btn:hover {
-  background-color: #f5f5f5;
+
+.logo {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
 }
-.reply-btn:active {
-  background-color: #ccc;
-}
-.reply-btn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-.demo-section {
-  margin-bottom: 40px;
-}
-.demo-section h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 16px;
+
+.logo h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
   color: #333;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: #888;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-link {
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.nav-link.active {
+  background: #4a90d9;
+  color: white;
+}
+
+.app-main {
+  flex: 1;
+  padding: 32px 24px;
+  background: #f5f5f5;
+}
+
+.app-footer {
+  background: white;
+  border-top: 1px solid #e5e5e5;
+  padding: 20px 24px;
+  text-align: center;
+}
+
+.app-footer p {
+  margin: 0;
+  color: #888;
+  font-size: 0.875rem;
+}
+
+.app-footer a {
+  color: #4a90d9;
+  text-decoration: none;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
 }
 </style>

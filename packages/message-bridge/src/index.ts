@@ -1,4 +1,5 @@
 import BaseDriver, { type Message } from './drivers/BaseDriver'
+import BroadcastDriver from './drivers/BroadcastDriver'
 import MittDriver from './drivers/MittDriver'
 import PostMessageDriver from './drivers/PostMessageDriver'
 import WebSocketDriver from './drivers/WebSocktDriver'
@@ -341,5 +342,12 @@ export default class MessageBridge<RequestPayload = unknown, ResponsePayload = u
   }
 }
 
-export { BaseDriver, MittDriver, PostMessageDriver, WebSocketDriver, createEmitter }
+export {
+  BaseDriver,
+  BroadcastDriver,
+  MittDriver,
+  PostMessageDriver,
+  WebSocketDriver,
+  createEmitter,
+}
 export type { MessageBridgeOptions, RequestOptions, Message }

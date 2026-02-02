@@ -16,6 +16,7 @@ const requestPayload = ref('{"message": "Hello from BroadcastChannel!"}')
 const responseData = ref<unknown>(null)
 const channelName = ref('message-bridge-demo')
 const isConnected = ref(false)
+const autoConnect = ref(false)
 
 function addLog(type: string, direction: 'sent' | 'received', payload: unknown) {
   logs.value.push({
@@ -70,12 +71,12 @@ function clearLogs() {
   responseData.value = null
 }
 
-function reconnect(autoConnect: boolean = true) {
+function reconnect(should_open_new_tab: boolean = true) {
   if (bridgeRef.value) {
     bridgeRef.value.destroy()
   }
-  if (autoConnect) {
-    window.open('http://localhost:5173/broadcast?autoConnect=true&channelName=' + channelName.value)
+  if (should_open_new_tab) {
+    window.open(`${window.location.href}?autoConnect=true&channelName=${channelName.value}`)
   }
 
   const driver = new BroadcastDriver({ channel: channelName.value })
@@ -83,8 +84,9 @@ function reconnect(autoConnect: boolean = true) {
   bridgeRef.value = bridge
 
   bridge.onCommand((data) => {
-    addLog('COMMAND', 'received', data)
-    bridge.reply(data.id, { message: 'Command received' })
+    console.log("🚀 ~ reconnect ~ data:", data)
+    addLog(data.type.toUpperCase(), 'received', data)
+    bridge.reply(data.id, { message: 'data received' })
   })
 
   bridge.onError((error) => {
@@ -97,9 +99,10 @@ function reconnect(autoConnect: boolean = true) {
 
 onMounted(() => {
   const urlParams = new URLSearchParams(window.location.search)
-  const autoConnect = urlParams.get('autoConnect')
+  const auto_connect = urlParams.get('autoConnect')
   const channel_name = urlParams.get('channelName')
-  if (autoConnect) {
+  if (auto_connect) {
+    autoConnect.value = true
     channelName.value = channel_name ?? channelName.value
     reconnect(false)
   }
@@ -126,7 +129,7 @@ onUnmounted(() => {
         <div class="config-row">
           <label>Channel Name:</label>
           <input v-model="channelName" type="text" class="input" placeholder="Enter channel name" />
-          <button class="btn primary" @click="reconnect">Connect</button>
+          <button class="btn primary" :disabled="autoConnect" @click="reconnect">Connect</button>
         </div>
         <div class="status-row">
           <span class="status-badge" :class="{ ready: isConnected }">
@@ -429,6 +432,11 @@ onUnmounted(() => {
 
 .log-type.system {
   background: #7c4dff;
+  color: white;
+}
+
+.log-type.ping {
+  background: #4a90d9;
   color: white;
 }
 

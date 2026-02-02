@@ -1,18 +1,18 @@
-# @message-bridge/core
+# message-bridge
 
 一个统一、类型安全、支持多种传输协议的跨上下文消息通信库。
 
 ## 安装
 
 ```bash
-npm install @message-bridge/core
+npm install message-bridge
 # or
-pnpm add @message-bridge/core
+pnpm add message-bridge
 ```
 
 ## 特性
 
-- **统一接口**: 支持 Mitt（进程内）、PostMessage（iframe/window 间）、WebSocket（网络通信）
+- **统一接口**: 支持 Mitt（进程内）、PostMessage（iframe/window 间）、BroadcastChannel（跨标签页）、WebSocket（网络通信）
 - **类型安全**: 完整的 TypeScript 支持，泛型类型推断
 - **请求-响应模式**: Promise 风格的异步通信，内置超时保护
 - **自动重连**: WebSocket 自动重连机制，支持指数退避
@@ -21,6 +21,7 @@ pnpm add @message-bridge/core
 - **消息验证**: 运行时消息格式验证，防止非法消息
 - **监控指标**: 内置消息统计和性能监控
 - **结构化日志**: 支持自定义日志处理器，便于调试和生产监控
+- **资源管理**: 所有 Driver 支持 `destroy()` 方法，正确清理资源
 
 ## 快速开始
 
@@ -28,7 +29,7 @@ pnpm add @message-bridge/core
 
 ```typescript
 import mitt from 'mitt'
-import { MittDriver, MessageBridge } from '@message-bridge/core'
+import { MittDriver, MessageBridge } from 'message-bridge'
 
 const emitter = mitt()
 const driver = new MittDriver(emitter)
@@ -49,7 +50,7 @@ const unsubscribe = bridge.onCommand((data) => {
 ### 2. iframe/Window 通信（PostMessage）
 
 ```typescript
-import { PostMessageDriver, MessageBridge } from '@message-bridge/core'
+import { PostMessageDriver, MessageBridge } from 'message-bridge'
 
 // 发送方
 const driver = new PostMessageDriver(window.parent, 'https://example.com')
@@ -69,10 +70,35 @@ iframeBridge.onCommand((data) => {
 })
 ```
 
-### 3. WebSocket 通信
+### 3. 跨标签页通信（BroadcastChannel）
 
 ```typescript
-import { WebSocketDriver, MessageBridge } from '@message-bridge/core'
+import { BroadcastDriver, MessageBridge } from 'message-bridge'
+
+// 创建 BroadcastDriver，指定频道名称
+const driver = new BroadcastDriver({ channel: 'my-app-channel' })
+const bridge = new MessageBridge(driver)
+
+// 监听命令
+bridge.onCommand((data) => {
+  console.log('Received:', data.type, data.payload)
+  bridge.reply(data.id, { result: 'success' })
+})
+
+// 发送请求（会在所有同频道的标签页中广播）
+const response = await bridge.request({
+  type: 'SYNC_STATE',
+  payload: { state: '...' },
+})
+
+// 清理资源
+bridge.destroy()
+```
+
+### 4. WebSocket 通信
+
+```typescript
+import { WebSocketDriver, MessageBridge } from 'message-bridge'
 
 // 自动重连配置
 const driver = new WebSocketDriver({
@@ -278,6 +304,8 @@ bridge.flushQueue()
 bridge.destroy()
 ```
 
+**注意**: `destroy()` 方法会自动调用驱动的 `destroy()` 方法来清理事件监听器等资源。建议在组件卸载时调用此方法以避免内存泄漏。
+
 ### WebSocketDriver
 
 #### 构造函数
@@ -355,18 +383,59 @@ new MittDriver(emitter: Emitter<Record<string, Message>>)
 **示例：**
 
 ```typescript
-import mitt from 'mitt'
+import { createEmitter, MittDriver } from 'message-bridge'
 
-const emitter = mitt()
+// 使用工厂函数创建独立的 emitter 实例
+const emitter = createEmitter()
 const driver = new MittDriver(emitter)
 ```
+
+**注意**: 推荐使用 `createEmitter()` 工厂函数创建独立的 emitter 实例。
+
+### BroadcastDriver
+
+#### 构造函数
+
+```typescript
+new BroadcastDriver(options: BroadcastDriverOptions)
+```
+
+**BroadcastDriverOptions:**
+
+| 参数    | 类型   | 默认值 | 说明         |
+| ------- | ------ | ------ | ------------ |
+| channel | string | 必填   | 广播频道名称 |
+
+**示例：**
+
+```typescript
+import { BroadcastDriver, MessageBridge } from 'message-bridge'
+
+const driver = new BroadcastDriver({ channel: 'my-app-channel' })
+const bridge = new MessageBridge(driver)
+
+// 监听来自其他标签页的消息
+bridge.onCommand((data) => {
+  console.log('Received from another tab:', data)
+  bridge.reply(data.id, { received: true })
+})
+
+// 清理资源
+bridge.destroy()
+```
+
+**特性：**
+
+- 同一源下的多个标签页可以通过相同频道名进行通信
+- 自动添加协议标识符，过滤非 MessageBridge 消息
+- 支持动态切换频道
 
 ## Logger 日志
 
 ### 基本使用
 
 ```typescript
-import { Logger, createConsoleHandler, LogLevel } from '@message-bridge/core/utils/logger'
+import { Logger, createConsoleHandler, LogLevel } from 'message-bridge/utils/logger'
 
 const logger = new Logger('MyApp', LogLevel.DEBUG)
 logger.addHandler(createConsoleHandler())
@@ -399,7 +468,7 @@ logger.setMinLevel(LogLevel.WARN) // 只输出 WARN 和 ERROR
 ### 在 Bridge 中使用
 
 ```typescript
-import { Logger } from '@message-bridge/core/utils/logger'
+import { Logger } from 'message-bridge/utils/logger'
 
 const logger = new Logger('MyBridge')
 const bridge = new MessageBridge(driver, { logger })
@@ -437,8 +506,10 @@ console.log(response.name)
 
 - **自动清理**: 定期清理过期的消息记录
 - **手动清理**: `reply()` 后立即删除记录
-- **资源释放**: `destroy()` 方法清理所有定时器
+- **资源释放**: `destroy()` 方法清理所有定时器和事件监听器
 - **队列限制**: 消息队列有最大大小限制，防止无限增长
+- **Driver 生命周期**: 每个 Driver 实现 `destroy()` 方法，正确释放资源
+- **Emitter 隔离**: 推荐使用 `createEmitter()` 创建独立实例，避免共享单例导致的内存泄漏
 
 ### 3. 错误恢复
 
@@ -450,6 +521,7 @@ console.log(response.name)
 ### 4. 安全加固
 
 - **PostMessage**: 禁止使用 `'*'` 作为 targetOrigin，必须明确指定源地址
+- **BroadcastChannel**: 使用协议标识符 `__messageBridge` 区分 MessageBridge 消息和用户自定义消息
 - **消息验证**: 运行时验证消息格式，防止非法消息导致崩溃
 - **来源过滤**: 自动过滤非目标消息
 

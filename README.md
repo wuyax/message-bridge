@@ -75,7 +75,7 @@ pnpm lint
 
 核心消息通信库，支持以下特性：
 
-- **统一接口**: 支持 Mitt（进程内）、PostMessage（iframe/window 间）、WebSocket（网络通信）
+- **统一接口**: 支持 Mitt（进程内）、PostMessage（iframe/window 间）、BroadcastChannel（跨标签页）、WebSocket（网络通信）
 - **类型安全**: 完整的 TypeScript 支持，泛型类型推断
 - **请求-响应模式**: Promise 风格的异步通信，内置超时保护
 - **自动重连**: WebSocket 自动重连机制，支持指数退避
@@ -88,8 +88,10 @@ pnpm lint
 ### 使用示例
 
 ```typescript
-import { MittDriver, MessageBridge, emitter } from 'message-bridge'
+import { createEmitter, MittDriver, MessageBridge } from 'message-bridge'
 
+// 使用工厂函数创建独立的 emitter 实例
+const emitter = createEmitter()
 const driver = new MittDriver(emitter)
 const bridge = new MessageBridge(driver)
 
@@ -105,15 +107,24 @@ const unsubscribe = bridge.onCommand((data) => {
     bridge.reply(data.id, { name: 'test', value: 42 })
   }
 })
+
+// 清理资源（重要！）
+bridge.destroy()
 ```
 
 详细 API 文档请参考 [packages/message-bridge](./packages/message-bridge/README.md)。
 
-## @message-bridge/example
+### 示例应用
 
-Vue3 示例应用，演示如何在 Vue 项目中使用 `message-bridge`。
+Vue3 示例应用包含以下演示页面：
 
-### 运行示例
+| 路由           | 演示内容                               |
+| -------------- | -------------------------------------- |
+| `/`            | MittDriver - 进程内通信                |
+| `/postmessage` | PostMessageDriver - 跨窗口/iframe 通信 |
+| `/broadcast`   | BroadcastDriver - 跨标签页通信         |
+
+运行示例：
 
 ```bash
 pnpm dev

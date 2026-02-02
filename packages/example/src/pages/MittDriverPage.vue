@@ -1,33 +1,30 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import Sender from '../components/Sender.vue'
-import { MittDriver, emitter } from 'message-bridge'
+import { MittDriver } from 'message-bridge'
 import MessageBridge from 'message-bridge'
+import { emitter } from '../assets/utils'
 
 const driver = new MittDriver(emitter)
-const bridge = new MessageBridge(driver)
-
-bridge.onCommand((data) => {
-  console.log(data)
-  bridge.reply(data.id, { result: 'success' })
-})
-
+const bridge = new MessageBridge(driver, { instanceId: 'myBridgeId' })
 let messageId = ref<string[]>([])
-const driver2 = new MittDriver(emitter)
-const bridge2 = new MessageBridge(driver2, { instanceId: 'myBridgeId' })
-bridge2.onCommand((data) => {
+bridge.onCommand((data) => {
   console.log(data)
   messageId.value.push(data.id)
 })
 
 function send(id: string) {
   try {
-    bridge2.reply(id, { result: 'success' })
+    bridge.reply(id, { result: 'success' })
     messageId.value = messageId.value.filter((item) => item !== id)
   } catch (error) {
     console.log(error)
   }
 }
+
+onUnmounted(() => {
+  bridge.destroy()
+})
 </script>
 
 <template>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { onUnmounted } from 'vue'
 import MessageBridge from 'message-bridge'
-import { MittDriver, emitter } from 'message-bridge'
+import { MittDriver } from 'message-bridge'
+import { emitter } from '../assets/utils'
 
 const driver = new MittDriver(emitter)
 const bridge = new MessageBridge(driver)
@@ -21,6 +23,10 @@ function send() {
       console.log(err)
     })
 }
+
+onUnmounted(() => {
+  bridge.destroy()
+})
 </script>
 
 <template>

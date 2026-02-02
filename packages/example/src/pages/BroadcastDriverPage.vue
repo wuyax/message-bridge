@@ -129,7 +129,7 @@ onUnmounted(() => {
         <div class="config-row">
           <label>Channel Name:</label>
           <input v-model="channelName" type="text" class="input" placeholder="Enter channel name" />
-          <button class="btn primary" :disabled="autoConnect" @click="reconnect">Connect</button>
+          <button class="btn primary" :disabled="autoConnect" @click="() => reconnect()">Connect</button>
         </div>
         <div class="status-row">
           <span class="status-badge" :class="{ ready: isConnected }">

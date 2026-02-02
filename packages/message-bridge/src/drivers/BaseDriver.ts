@@ -17,4 +17,7 @@ export default class BaseDriver {
   send(data: Message) {
     throw new Error('Not implemented')
   }
+  destroy() {
+    // Override in subclasses to clean up resources
+  }
 }

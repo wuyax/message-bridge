@@ -114,4 +114,9 @@ export default class WebSocketDriver extends BaseDriver {
       this.ws = null
     }
   }
+
+  destroy() {
+    this.close()
+    this.onMessage = null
+  }
 }

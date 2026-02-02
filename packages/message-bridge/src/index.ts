@@ -3,7 +3,7 @@ import MittDriver from './drivers/MittDriver'
 import PostMessageDriver from './drivers/PostMessageDriver'
 import WebSocketDriver from './drivers/WebSocktDriver'
 import { Logger, createConsoleHandler } from './utils/logger'
-import emitter from './utils/emitter'
+import { createEmitter } from './utils/emitter'
 
 interface MessageBridgeOptions {
   instanceId?: string
@@ -327,12 +327,19 @@ export default class MessageBridge<RequestPayload = unknown, ResponsePayload = u
       metrics: this.getMetrics(),
     })
 
+    // Clean up driver resources (e.g., event listeners)
+    this.driver.destroy?.()
+
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval)
       this.cleanupInterval = null
     }
+
+    // Clear all handlers
+    this.messageHandlers.clear()
+    this.metricsCallbacks.clear()
   }
 }
 
-export { BaseDriver, MittDriver, PostMessageDriver, WebSocketDriver, emitter }
+export { BaseDriver, MittDriver, PostMessageDriver, WebSocketDriver, createEmitter }
 export type { MessageBridgeOptions, RequestOptions, Message }

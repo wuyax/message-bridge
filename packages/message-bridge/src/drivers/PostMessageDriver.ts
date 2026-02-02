@@ -19,6 +19,7 @@ function isBridgeMessage(data: unknown): data is BridgeMessage {
 export default class PostMessageDriver extends BaseDriver {
   targetWindow: Window
   targetOrigin: string
+  private messageHandler: ((event: MessageEvent) => void) | null = null
   constructor(targetWindow: Window, targetOrigin: string) {
     super()
 
@@ -31,18 +32,17 @@ export default class PostMessageDriver extends BaseDriver {
     this.targetWindow = targetWindow
     this.targetOrigin = targetOrigin
 
-    window.addEventListener('message', (event) => {
+    this.messageHandler = (event) => {
       if (event.origin !== this.targetOrigin) {
         return
       }
-      // Only process messages that are from MessageBridge protocol
       if (!isBridgeMessage(event.data)) {
         return
       }
-      // Strip the protocol identifier before passing to the bridge
       const { __messageBridge, ...message } = event.data
       this.onMessage?.(message as Message)
-    })
+    }
+    window.addEventListener('message', this.messageHandler)
   }
 
   send(data: Message) {
@@ -51,5 +51,13 @@ export default class PostMessageDriver extends BaseDriver {
       __messageBridge: MESSAGE_BRIDGE_PROTOCOL,
     }
     this.targetWindow.postMessage(bridgeMessage, this.targetOrigin)
+  }
+
+  destroy() {
+    if (this.messageHandler) {
+      window.removeEventListener('message', this.messageHandler)
+      this.messageHandler = null
+    }
+    this.onMessage = null
   }
 }

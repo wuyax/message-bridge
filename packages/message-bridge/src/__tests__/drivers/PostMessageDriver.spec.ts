@@ -34,7 +34,7 @@ describe('PostMessageDriver', () => {
     driver.send({ id: 'test', type: 'test', from: 'sender' })
 
     expect(mockWindow.postMessage).toHaveBeenCalledWith(
-      { id: 'test', type: 'test', from: 'sender' },
+      { id: 'test', type: 'test', from: 'sender', __messageBridge: 'message-bridge-v1' },
       'https://example.com',
     )
   })
@@ -64,12 +64,29 @@ describe('PostMessageDriver', () => {
     driver.onMessage = handler
 
     const mockEvent = new MessageEvent('message', {
-      data: { id: 'test', type: 'test', from: 'sender' },
+      data: { id: 'test', type: 'test', from: 'sender', __messageBridge: 'message-bridge-v1' },
       origin: 'https://example.com',
     })
 
     window.dispatchEvent(mockEvent)
 
     expect(handler).toHaveBeenCalledWith({ id: 'test', type: 'test', from: 'sender' })
+  })
+
+  it('should filter out non-MessageBridge messages', () => {
+    const handler = vi.fn()
+    const mockWindow = {} as Window
+
+    const driver = new PostMessageDriver(mockWindow, 'https://example.com')
+    driver.onMessage = handler
+
+    const mockEvent = new MessageEvent('message', {
+      data: { id: 'test', type: 'test', from: 'sender' },
+      origin: 'https://example.com',
+    })
+
+    window.dispatchEvent(mockEvent)
+
+    expect(handler).not.toHaveBeenCalled()
   })
 })

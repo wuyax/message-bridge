@@ -1,8 +1,8 @@
 import BaseDriver, { type Message } from './BaseDriver'
 import { Logger, createConsoleHandler, LogLevel } from '../utils/logger'
 
-// Protocol identifier to distinguish MessageBridge messages from other WebSocket traffic
-const MESSAGE_BRIDGE_PROTOCOL = 'message-bridge-v1'
+// Protocol identifier to distinguish MessageNexus messages from other WebSocket traffic
+const MESSAGE_NEXUS_PROTOCOL = 'message-nexus-v1'
 
 interface ReconnectOptions {
   maxRetries?: number
@@ -58,7 +58,7 @@ export default class WebSocketDriver extends BaseDriver {
           typeof rawData === 'object' &&
           rawData !== null &&
           '__messageBridge' in rawData &&
-          rawData.__messageBridge === MESSAGE_BRIDGE_PROTOCOL
+          rawData.__messageBridge === MESSAGE_NEXUS_PROTOCOL
         ) {
           const { __messageBridge, ...data } = rawData
           this.logger.debug('Message received', { data })
@@ -115,7 +115,7 @@ export default class WebSocketDriver extends BaseDriver {
     this.logger.debug('Sending message', { data })
     const bridgeMessage = {
       ...data,
-      __messageBridge: MESSAGE_BRIDGE_PROTOCOL,
+      __messageBridge: MESSAGE_NEXUS_PROTOCOL,
     }
     this.ws.send(JSON.stringify(bridgeMessage))
   }

@@ -20,9 +20,9 @@ importers:
 
   packages/example:
     dependencies:
-      message-bridge:
+      message-nexus:
         specifier: workspace:*
-        version: link:../message-bridge
+        version: link:../message-nexus
       mitt:
         specifier: ^3.0.1
         version: 3.0.1
@@ -76,7 +76,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(typescript@5.9.3)
 
-  packages/message-bridge:
+  packages/message-nexus:
     dependencies:
       mitt:
         specifier: ^3.0.0
@@ -98,7 +98,7 @@ importers:
         specifier: ^4.0.18
         version: 4.0.18(@types/node@24.10.9)(jsdom@27.4.0)(yaml@2.8.2)
 
-  packages/websocket-server:
+  packages/server:
     devDependencies:
       ws:
         specifier: ^8.19.0

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onUnmounted } from 'vue'
-import MessageBridge from 'message-bridge'
-import { MittDriver } from 'message-bridge'
+import MessageBridge from 'message-nexus'
+import { MittDriver } from 'message-nexus'
 import { emitter } from '../assets/utils'
 
 const driver = new MittDriver(emitter)

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import MessageBridge from 'message-bridge'
-import { BroadcastDriver } from 'message-bridge'
+import MessageBridge from 'message-nexus'
+import { BroadcastDriver } from 'message-nexus'
 
 interface LogEntry {
   time: string
@@ -14,7 +14,7 @@ const bridgeRef = ref<MessageBridge | null>(null)
 const logs = ref<LogEntry[]>([])
 const requestPayload = ref('{"message": "Hello from BroadcastChannel!"}')
 const responseData = ref<unknown>(null)
-const channelName = ref('message-bridge-demo')
+const channelName = ref('message-nexus-demo')
 const isConnected = ref(false)
 const autoConnect = ref(false)
 
@@ -84,7 +84,7 @@ function reconnect(should_open_new_tab: boolean = true) {
   bridgeRef.value = bridge
 
   bridge.onCommand((data) => {
-    console.log("🚀 ~ reconnect ~ data:", data)
+    console.log('🚀 ~ reconnect ~ data:', data)
     addLog(data.type.toUpperCase(), 'received', data)
     bridge.reply(data.id, { message: 'data received' })
   })
@@ -129,7 +129,9 @@ onUnmounted(() => {
         <div class="config-row">
           <label>Channel Name:</label>
           <input v-model="channelName" type="text" class="input" placeholder="Enter channel name" />
-          <button class="btn primary" :disabled="autoConnect" @click="() => reconnect()">Connect</button>
+          <button class="btn primary" :disabled="autoConnect" @click="() => reconnect()">
+            Connect
+          </button>
         </div>
         <div class="status-row">
           <span class="status-badge" :class="{ ready: isConnected }">

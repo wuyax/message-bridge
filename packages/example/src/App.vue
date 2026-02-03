@@ -32,8 +32,8 @@ import { RouterLink, RouterView } from 'vue-router'
     <footer class="app-footer">
       <p>
         Built with
-        <a href="https://github.com/wuyax/message-bridge" target="_blank" rel="noopener">
-          MessageBridge
+        <a href="https://github.com/wuyax/message-nexus" target="_blank" rel="noopener">
+          MessageNexus
         </a>
       </p>
     </footer>

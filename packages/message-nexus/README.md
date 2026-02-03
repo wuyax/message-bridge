@@ -1,13 +1,13 @@
-# message-bridge
+# message-nexus
 
 一个统一、类型安全、支持多种传输协议的跨上下文消息通信库。
 
 ## 安装
 
 ```bash
-npm install message-bridge
+npm install message-nexus
 # or
-pnpm add message-bridge
+pnpm add message-nexus
 ```
 
 ## 特性
@@ -29,7 +29,7 @@ pnpm add message-bridge
 
 ```typescript
 import mitt from 'mitt'
-import { MittDriver, MessageBridge } from 'message-bridge'
+import { MittDriver, MessageBridge } from 'message-nexus'
 
 const emitter = mitt()
 const driver = new MittDriver(emitter)
@@ -50,7 +50,7 @@ const unsubscribe = bridge.onCommand((data) => {
 ### 2. iframe/Window 通信（PostMessage）
 
 ```typescript
-import { PostMessageDriver, MessageBridge } from 'message-bridge'
+import { PostMessageDriver, MessageBridge } from 'message-nexus'
 
 // 发送方
 const driver = new PostMessageDriver(window.parent, 'https://example.com')
@@ -73,7 +73,7 @@ iframeBridge.onCommand((data) => {
 ### 3. 跨标签页通信（BroadcastChannel）
 
 ```typescript
-import { BroadcastDriver, MessageBridge } from 'message-bridge'
+import { BroadcastDriver, MessageBridge } from 'message-nexus'
 
 // 创建 BroadcastDriver，指定频道名称
 const driver = new BroadcastDriver({ channel: 'my-app-channel' })
@@ -98,7 +98,7 @@ bridge.destroy()
 ### 4. WebSocket 通信
 
 ```typescript
-import { WebSocketDriver, MessageBridge } from 'message-bridge'
+import { WebSocketDriver, MessageBridge } from 'message-nexus'
 
 // 自动重连配置
 const driver = new WebSocketDriver({
@@ -383,7 +383,7 @@ new MittDriver(emitter: Emitter<Record<string, Message>>)
 **示例：**
 
 ```typescript
-import { createEmitter, MittDriver } from 'message-bridge'
+import { createEmitter, MittDriver } from 'message-nexus'
 
 // 使用工厂函数创建独立的 emitter 实例
 const emitter = createEmitter()
@@ -409,7 +409,7 @@ new BroadcastDriver(options: BroadcastDriverOptions)
 **示例：**
 
 ```typescript
-import { BroadcastDriver, MessageBridge } from 'message-bridge'
+import { BroadcastDriver, MessageBridge } from 'message-nexus'
 
 const driver = new BroadcastDriver({ channel: 'my-app-channel' })
 const bridge = new MessageBridge(driver)
@@ -435,7 +435,7 @@ bridge.destroy()
 ### 基本使用
 
 ```typescript
-import { Logger, createConsoleHandler, LogLevel } from 'message-bridge/utils/logger'
+import { Logger, createConsoleHandler, LogLevel } from 'message-nexus/utils/logger'
 
 const logger = new Logger('MyApp', LogLevel.DEBUG)
 logger.addHandler(createConsoleHandler())
@@ -468,7 +468,7 @@ logger.setMinLevel(LogLevel.WARN) // 只输出 WARN 和 ERROR
 ### 在 Bridge 中使用
 
 ```typescript
-import { Logger } from 'message-bridge/utils/logger'
+import { Logger } from 'message-nexus/utils/logger'
 
 const logger = new Logger('MyBridge')
 const bridge = new MessageBridge(driver, { logger })
@@ -564,7 +564,7 @@ logger.addHandler((entry) => {
 运行单元测试：
 
 ```bash
-cd packages/message-bridge
+cd packages/message-nexus
 pnpm test:run
 ```
 

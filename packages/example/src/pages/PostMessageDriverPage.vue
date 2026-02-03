@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import MessageBridge from 'message-bridge'
-import { PostMessageDriver } from 'message-bridge'
+import MessageBridge from 'message-nexus'
+import { PostMessageDriver } from 'message-nexus'
 
 interface LogEntry {
   time: string

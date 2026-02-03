@@ -7,12 +7,12 @@
   "scripts": {
     "dev": "pnpm --filter @message-bridge/example dev",
     "dev:ws": "pnpm --filter @message-bridge/server start",
-    "build": "pnpm --filter message-bridge build && pnpm --filter @message-bridge/example build",
-    "build:core": "pnpm --filter message-bridge build",
+    "build": "pnpm --filter message-nexus build && pnpm --filter @message-bridge/example build",
+    "build:core": "pnpm --filter message-nexus build",
     "build:example": "pnpm --filter @message-bridge/example build",
-    "test": "pnpm --filter message-bridge test",
-    "test:run": "pnpm --filter message-bridge test:run",
-    "type-check": "pnpm --filter message-bridge type-check",
+    "test": "pnpm --filter message-nexus test",
+    "test:run": "pnpm --filter message-nexus test:run",
+    "type-check": "pnpm --filter message-nexus type-check",
     "lint": "prettier --write --experimental-cli \"packages/*/src/**/*.{ts,vue}\"",
     "clean": "pnpm --filter ./packages/** -r clean && rm -rf node_modules"
   },

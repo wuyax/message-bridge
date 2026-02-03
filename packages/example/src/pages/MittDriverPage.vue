@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from 'vue'
 import Sender from '../components/Sender.vue'
-import { MittDriver } from 'message-bridge'
-import MessageBridge from 'message-bridge'
+import { MittDriver } from 'message-nexus'
+import MessageBridge from 'message-nexus'
 import { emitter } from '../assets/utils'
 
 const driver = new MittDriver(emitter)

@@ -6,7 +6,7 @@
 
 这是一个使用 pnpm workspaces 的 monorepo 项目，包含以下包：
 
-- **`packages/message-bridge`**: 核心 npm 包
+- **`packages/message-nexus`**: 核心 npm 包
 - **`packages/example`**: Vue3 示例应用，用于验证和演示
 
 ## 快速开始
@@ -71,7 +71,7 @@ pnpm type-check
 pnpm lint
 ```
 
-## message-bridge
+## message-nexus
 
 核心消息通信库，支持以下特性：
 
@@ -88,7 +88,7 @@ pnpm lint
 ### 使用示例
 
 ```typescript
-import { createEmitter, MittDriver, MessageBridge } from 'message-bridge'
+import { createEmitter, MittDriver, MessageBridge } from 'message-nexus'
 
 // 使用工厂函数创建独立的 emitter 实例
 const emitter = createEmitter()
@@ -112,7 +112,7 @@ const unsubscribe = bridge.onCommand((data) => {
 bridge.destroy()
 ```
 
-详细 API 文档请参考 [packages/message-bridge](./packages/message-bridge/README.md)。
+详细 API 文档请参考 [packages/message-nexus](./packages/message-nexus/README.md)。
 
 ### 示例应用
 
@@ -137,8 +137,8 @@ pnpm dev
 在 monorepo 根目录，你可以使用以下命令针对特定工作空间执行操作：
 
 ```bash
-# 在 message-bridge 包中运行命令
-pnpm --filter message-bridge <command>
+# 在 message-nexus 包中运行命令
+pnpm --filter message-nexus <command>
 
 # 在 example 包中运行命令
 pnpm --filter @message-bridge/example <command>
@@ -152,7 +152,7 @@ pnpm --filter ./packages/** <command>
 ### 1. 更新版本号
 
 ```bash
-pnpm --filter message-bridge version <major|minor|patch>
+pnpm --filter message-nexus version <major|minor|patch>
 ```
 
 ### 2. 构建包
@@ -164,7 +164,7 @@ pnpm build:core
 ### 3. 发布到 npm
 
 ```bash
-pnpm --filter message-bridge publish
+pnpm --filter message-nexus publish
 ```
 
 ## 许可证

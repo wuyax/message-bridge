@@ -34,7 +34,7 @@ describe('PostMessageDriver', () => {
     driver.send({ id: 'test', type: 'test', from: 'sender' })
 
     expect(mockWindow.postMessage).toHaveBeenCalledWith(
-      { id: 'test', type: 'test', from: 'sender', __messageBridge: 'message-bridge-v1' },
+      { id: 'test', type: 'test', from: 'sender', __messageBridge: 'message-nexus-v1' },
       'https://example.com',
     )
   })
@@ -64,7 +64,7 @@ describe('PostMessageDriver', () => {
     driver.onMessage = handler
 
     const mockEvent = new MessageEvent('message', {
-      data: { id: 'test', type: 'test', from: 'sender', __messageBridge: 'message-bridge-v1' },
+      data: { id: 'test', type: 'test', from: 'sender', __messageBridge: 'message-nexus-v1' },
       origin: 'https://example.com',
     })
 

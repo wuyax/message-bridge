@@ -2,7 +2,7 @@
   "name": "@message-bridge/server",
   "version": "1.0.0",
   "private": true,
-  "description": "Node.js servers for testing message-bridge",
+  "description": "Node.js servers for testing message-nexus",
   "main": "server.cjs",
   "scripts": {
     "start": "node server.cjs",
@@ -10,7 +10,7 @@
   },
   "keywords": [
     "websocket",
-    "message-bridge"
+    "nexus"
   ],
   "license": "MIT",
   "devDependencies": {

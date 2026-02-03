@@ -1,10 +1,10 @@
 import BaseDriver, { type Message } from './BaseDriver'
 
-// Protocol identifier to distinguish MessageBridge messages from user-initiated postMessages
-const MESSAGE_BRIDGE_PROTOCOL = 'message-bridge-v1'
+// Protocol identifier to distinguish MessageNexus messages from user-initiated postMessages
+const MESSAGE_NEXUS_PROTOCOL = 'message-nexus-v1'
 
 export interface BridgeMessage extends Message {
-  __messageBridge: typeof MESSAGE_BRIDGE_PROTOCOL
+  __messageBridge: typeof MESSAGE_NEXUS_PROTOCOL
 }
 
 function isBridgeMessage(data: unknown): data is BridgeMessage {
@@ -12,7 +12,7 @@ function isBridgeMessage(data: unknown): data is BridgeMessage {
     typeof data === 'object' &&
     data !== null &&
     '__messageBridge' in data &&
-    (data as Record<string, unknown>).__messageBridge === MESSAGE_BRIDGE_PROTOCOL
+    (data as Record<string, unknown>).__messageBridge === MESSAGE_NEXUS_PROTOCOL
   )
 }
 
@@ -48,7 +48,7 @@ export default class PostMessageDriver extends BaseDriver {
   send(data: Message) {
     const bridgeMessage: BridgeMessage = {
       ...data,
-      __messageBridge: MESSAGE_BRIDGE_PROTOCOL,
+      __messageBridge: MESSAGE_NEXUS_PROTOCOL,
     }
     this.targetWindow.postMessage(bridgeMessage, this.targetOrigin)
   }

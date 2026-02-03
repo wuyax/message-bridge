@@ -51,7 +51,7 @@ describe('BroadcastDriver', () => {
       id: 'test',
       type: 'test',
       from: 'sender',
-      __messageBridge: 'message-bridge-v1',
+      __messageBridge: 'message-nexus-v1',
     })
 
     vi.unstubAllGlobals()
@@ -76,7 +76,7 @@ describe('BroadcastDriver', () => {
           id: 'test',
           type: 'test',
           from: 'sender',
-          __messageBridge: 'message-bridge-v1',
+          __messageBridge: 'message-nexus-v1',
         },
       } as MessageEvent)
     }

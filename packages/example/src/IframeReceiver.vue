@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import MessageBridge from 'message-bridge'
-import { PostMessageDriver } from 'message-bridge'
+import MessageBridge from 'message-nexus'
+import { PostMessageDriver } from 'message-nexus'
 
 const TARGET_ORIGIN = window.location.origin
 

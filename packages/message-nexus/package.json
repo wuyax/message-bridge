@@ -1,5 +1,5 @@
 {
-  "name": "message-bridge",
+  "name": "message-nexus",
   "version": "1.0.0",
   "type": "module",
   "description": "A unified, type-safe, multi-protocol cross-context message communication library",
@@ -25,7 +25,7 @@
   },
   "keywords": [
     "message",
-    "bridge",
+    "nexus",
     "communication",
     "postmessage",
     "websocket",

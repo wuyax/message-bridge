@@ -6,14 +6,11 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    vueDevTools(),
-  ],
+  plugins: [vue(), vueDevTools()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      'message-bridge': fileURLToPath(new URL('../message-bridge/src', import.meta.url)),
+      'message-nexus': fileURLToPath(new URL('../message-nexus/src', import.meta.url)),
     },
   },
 })

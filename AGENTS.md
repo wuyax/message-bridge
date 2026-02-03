@@ -22,8 +22,8 @@ pnpm test            # Watch mode (vitest)
 pnpm test:run        # Single test run
 
 # Run tests for specific package
-pnpm --filter message-bridge test
-pnpm --filter message-bridge test:run
+pnpm --filter message-nexus test
+pnpm --filter message-nexus test:run
 
 # Type check
 pnpm type-check
@@ -40,13 +40,13 @@ pnpm clean
 Run a single test file:
 
 ```bash
-cd packages/message-bridge && pnpm test:run -- src/__tests__/MessageBridge.spec.ts
+cd packages/message-nexus && pnpm test:run -- src/__tests__/MessageBridge.spec.ts
 ```
 
 Run a specific test within a file:
 
 ```bash
-cd packages/message-bridge && pnpm test:run -- -t "should timeout after specified time"
+cd packages/message-nexus && pnpm test:run -- -t "should timeout after specified time"
 ```
 
 ## Code Style Guidelines
@@ -204,9 +204,9 @@ logger.error('Send failed', { error: err.message })
 ## Project Structure
 
 ```
-message-bridge/
+message-nexus/
 ├── packages/
-│   ├── message-bridge/     # Core library
+│   ├── message-nexus/     # Core library
 │   │   ├── src/
 │   │   │   ├── drivers/    # Driver implementations
 │   │   │   ├── utils/      # Utilities (logger, emitter)

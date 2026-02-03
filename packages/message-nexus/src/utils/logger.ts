@@ -69,9 +69,20 @@ export class Logger {
   }
 }
 
+function genTimestamp() {
+  const now = new Date()
+  return now.toLocaleTimeString('zh-CN', {
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    fractionalSecondDigits: 3,
+  })
+}
+
 export const createConsoleHandler = (): LogHandler => {
   return (entry: LogEntry) => {
-    const timestamp = new Date(entry.timestamp).toISOString()
+    const timestamp = genTimestamp()
     const prefix = `[${timestamp}] [${entry.level.toUpperCase()}] [${entry.context || 'app'}]`
     const logFn =
       entry.level === LogLevel.DEBUG

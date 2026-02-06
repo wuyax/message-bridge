@@ -12,6 +12,7 @@
     "build:example": "pnpm --filter @message-bridge/example build",
     "test": "pnpm --filter message-nexus test",
     "test:run": "pnpm --filter message-nexus test:run",
+    "test:task-scheduler": "pnpm --filter task-scheduler test",
     "type-check": "pnpm --filter message-nexus type-check",
     "lint": "prettier --write --experimental-cli \"packages/*/src/**/*.{ts,vue}\"",
     "clean": "pnpm --filter ./packages/** -r clean && rm -rf node_modules"

@@ -6,7 +6,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsup",
-    "test": "ts-node test.ts",
+    "test": "vitest",
+    "test:run": "vitest run",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"**/*.ts\""
   },
@@ -27,9 +28,9 @@
     "@types/three": "^0.150.0",
     "eslint": "^8.0.0",
     "prettier": "^3.0.0",
-    "ts-node": "^10.9.0",
     "tsup": "^8.4.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vitest": "^4.0.18"
   },
   "engines": {
     "node": ">=18.0.0"
